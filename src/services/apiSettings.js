@@ -7,3 +7,16 @@ export async function getSettings() {
 
   return data;
 }
+
+export async function updateSettings(newSetting) {
+  console.log(newSetting);
+  const { data, error } = await supabase
+    .from("settings")
+    .update(newSetting)
+    .eq("id", 1)
+    .single();
+
+  if (error) throw new Error("Could not update settings");
+
+  return data;
+}
