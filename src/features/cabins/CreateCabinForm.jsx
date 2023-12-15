@@ -1,19 +1,32 @@
+import { useForm } from "react-hook-form";
 import Form from "../../ui/Form";
 import Input from "../../ui/Input";
 import TextArea from "../../ui/TextArea";
 import FileInput from "../../ui/FileInput";
 import Button from "../../ui/Button";
-import { useForm } from "react-hook-form";
 import useCreateCabin from "./useCreateCabin";
 import FormRow from "../../ui/FormRow";
+import useEditCabin from "./useEditCabin";
 
-export default function CreateCabinForm() {
-  const { register, handleSubmit, reset, getValues, formState } = useForm();
+export default function CreateCabinForm({ cabinToEdit = {} }) {
+  const { id: editId, ...editValues } = cabinToEdit;
+  const isEditSession = Boolean(editId);
+  const { register, handleSubmit, reset, getValues, formState } = useForm({
+    defaultValues: isEditSession ? editValues : {},
+  });
   const { isCreating, createCabin } = useCreateCabin();
+  const { isEditing, editCabin } = useEditCabin();
+
   const { errors } = formState;
 
+  const isWorking = isEditing || isCreating;
+
   function onSubmit(data) {
-    createCabin({ ...data, image: data.image[0] }, { onSuccess: reset() });
+    const image = typeof data.image === "string" ? data.image : data.image[0];
+
+    if (isEditSession)
+      editCabin({ newCabinData: { ...data, image: image }, id: editId });
+    else createCabin({ ...data, image }, { onSuccess: reset() });
   }
 
   return (
@@ -23,7 +36,7 @@ export default function CreateCabinForm() {
           type="text"
           id="name"
           {...register("name", { required: "This field is required" })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -38,7 +51,7 @@ export default function CreateCabinForm() {
               message: "There should be minimum 1 guest",
             },
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -49,7 +62,7 @@ export default function CreateCabinForm() {
           {...register("regularPrice", {
             required: "This field is required",
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -64,7 +77,7 @@ export default function CreateCabinForm() {
               Number(value) < Number(getValues().regularPrice) ||
               "Discount should be less than regular price",
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -74,16 +87,18 @@ export default function CreateCabinForm() {
       >
         <TextArea
           {...register("description", { required: "This field is required" })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
       <FormRow label="Cabin photo">
         <FileInput
-          disabled={isCreating}
+          disabled={isWorking}
           id="image"
           accept="image/*"
-          {...register("image", { required: "This field is required" })}
+          {...register("image", {
+            required: isEditSession ? false : "This field is required",
+          })}
         />
       </FormRow>
 
@@ -91,7 +106,9 @@ export default function CreateCabinForm() {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isCreating}>Add cabin</Button>
+        <Button disabled={isWorking}>
+          {isEditSession ? "Edit cabin" : "Add cabin"}
+        </Button>
       </FormRow>
     </Form>
   );
