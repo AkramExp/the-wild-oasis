@@ -1,5 +1,11 @@
-import React from "react";
+import UpdateSettingsForm from "../features/settings/UpdateSettingsForm";
+import Heading from "../ui/Heading";
 
 export default function Settings() {
-  return <div>Settings</div>;
+  return (
+    <>
+      <Heading as="h1">Update Settings</Heading>
+      <UpdateSettingsForm />
+    </>
+  );
 }
