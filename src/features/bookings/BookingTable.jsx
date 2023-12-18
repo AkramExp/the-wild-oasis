@@ -4,9 +4,14 @@ import Table from "../../ui/Table";
 import Spinner from "../../ui/Spinner";
 import useBookings from "./useBookings";
 import BookingRow from "./BookingRow";
+import Pagination from "../../ui/Pagination";
+import { useSearchParams } from "react-router-dom";
 
 export default function BookingTable() {
-  const { bookings, isLoading } = useBookings();
+  const [searchParams] = useSearchParams();
+  const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
+
+  const { bookings, isLoading, count } = useBookings(page);
   console.log(bookings);
 
   if (isLoading) return <Spinner />;
@@ -27,6 +32,9 @@ export default function BookingTable() {
             <BookingRow booking={booking} key={booking.id} />
           )}
         />
+        <Table.Footer>
+          <Pagination count={count} />
+        </Table.Footer>
       </Table>
     </Menus>
   );
