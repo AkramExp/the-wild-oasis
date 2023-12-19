@@ -9,6 +9,8 @@ import ButtonText from "../../ui/ButtonText";
 import useBooking from "./useBooking";
 import Spinner from "../../ui/Spinner";
 import BookingDataBox from "./BookingDataBox";
+import { HiArrowUpOnSquare } from "react-icons/hi2";
+import useCheckout from "../check-in-out/useCheckout";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -24,6 +26,7 @@ const ButtonGroup = styled.div`
 
 export default function BookingDetail() {
   const { booking, isLoading } = useBooking();
+  const { checkout, isCheckingOut } = useCheckout();
   const navigate = useNavigate();
   const statusToTagName = {
     unconfirmed: "blue",
@@ -47,6 +50,21 @@ export default function BookingDetail() {
 
       <BookingDataBox booking={booking} />
       <ButtonGroup>
+        {status === "checked-in" && (
+          <Button
+            icon={<HiArrowUpOnSquare />}
+            onClick={() => checkout(bookingId)}
+            disabled={isCheckingOut}
+          >
+            Check out
+          </Button>
+        )}
+
+        {status === "unconfirmed" && (
+          <Button onClick={() => navigate(`checkin/${bookingId}`)}>
+            Check in
+          </Button>
+        )}
         <Button variation="secondary" onClick={() => navigate(-1)}>
           Back
         </Button>

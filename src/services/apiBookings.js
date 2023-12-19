@@ -41,3 +41,27 @@ export async function getBooking(id) {
 
   return data;
 }
+
+export async function updateBooking(id, obj) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .update(obj)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw new Error("Could not update bookings");
+
+  return { data };
+}
+
+export async function deleteBooking(id) {
+  // REMEMBER RLS POLICIES
+  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be deleted");
+  }
+  return data;
+}
