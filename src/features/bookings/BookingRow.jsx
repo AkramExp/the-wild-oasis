@@ -15,6 +15,7 @@ import Tag from "../../ui/Tag";
 import useCheckout from "../check-in-out/useCheckout";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import useDeleteBooking from "./useDeleteBooking";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -60,7 +61,9 @@ export default function BookingRow({ booking }) {
   const { name: cabinName } = cabins;
   const { fullName: guestName, email } = guests;
   const { checkout, isCheckingOut } = useCheckout();
+  const { deleteBooking, isDeleting } = useDeleteBooking();
   const navigate = useNavigate();
+
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -123,7 +126,9 @@ export default function BookingRow({ booking }) {
               </Menus.Button>
             )}
             <Modal.Open opens="delete">
-              <Menus.Button icon={<HiTrash />}>Delete Booking</Menus.Button>
+              <Menus.Button icon={<HiTrash />} disabled={isDeleting}>
+                Delete Booking
+              </Menus.Button>
             </Modal.Open>
           </Menus.List>
         </Menus.Menu>
