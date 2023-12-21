@@ -39,9 +39,16 @@ export default function ConfirmDelete({
           disabled={disabled}
           onClick={onCloseModal}
         >
-          Cancle
+          Cancel
         </Button>
-        <Button variation="danger" disabled={disabled} onClick={onConfirm}>
+        <Button
+          variation="danger"
+          disabled={disabled}
+          onClick={() => {
+            onConfirm();
+            onCloseModal();
+          }}
+        >
           Delete
         </Button>
       </div>

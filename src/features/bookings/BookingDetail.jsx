@@ -11,6 +11,10 @@ import Spinner from "../../ui/Spinner";
 import BookingDataBox from "./BookingDataBox";
 import { HiArrowUpOnSquare } from "react-icons/hi2";
 import useCheckout from "../check-in-out/useCheckout";
+import useDeleteBooking from "./useDeleteBooking";
+import { deleteBooking } from "../../services/apiBookings";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import Modal from "../../ui/Modal";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -27,6 +31,7 @@ const ButtonGroup = styled.div`
 export default function BookingDetail() {
   const { booking, isLoading } = useBooking();
   const { checkout, isCheckingOut } = useCheckout();
+  const { deleteBooking, isDeleting } = useDeleteBooking();
   const navigate = useNavigate();
   const statusToTagName = {
     unconfirmed: "blue",
@@ -50,6 +55,22 @@ export default function BookingDetail() {
 
       <BookingDataBox booking={booking} />
       <ButtonGroup>
+        <Modal>
+          <Modal.Open opens="delete">
+            <Button variation="danger" onClick={() => deleteBooking(bookingId)}>
+              Delete
+            </Button>
+          </Modal.Open>
+          <Modal.Window name="delete">
+            <ConfirmDelete
+              resourceName="booking"
+              onConfirm={() =>
+                deleteBooking(bookingId, { onSettled: navigate(-1) })
+              }
+            />
+          </Modal.Window>
+        </Modal>
+
         {status === "checked-in" && (
           <Button
             icon={<HiArrowUpOnSquare />}

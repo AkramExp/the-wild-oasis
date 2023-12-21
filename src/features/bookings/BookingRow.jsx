@@ -125,6 +125,7 @@ export default function BookingRow({ booking }) {
                 Check in
               </Menus.Button>
             )}
+
             <Modal.Open opens="delete">
               <Menus.Button icon={<HiTrash />} disabled={isDeleting}>
                 Delete Booking
