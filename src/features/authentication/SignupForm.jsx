@@ -5,7 +5,7 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import useSignup from "./useSignup";
 
-export default function SignupForm() {
+export default function SignupForm({ onCloseModal }) {
   const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
   const { signup, isLoading } = useSignup();
@@ -17,12 +17,20 @@ export default function SignupForm() {
         password,
         fullName,
       },
-      { onSettled: reset }
+      {
+        onSuccess: () => {
+          reset();
+          onCloseModal?.();
+        },
+        onError: () => {
+          reset();
+        },
+      }
     );
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form type="modal" onSubmit={handleSubmit(onSubmit)}>
       <FormRow label="Full Name" error={errors?.fullName?.message}>
         <Input
           type="text"
@@ -67,7 +75,7 @@ export default function SignupForm() {
         error={errors?.passwordConfirm?.message}
       >
         <Input
-          typr="password"
+          type="password"
           id="passwordConfirm"
           {...register("passwordConfirm", {
             required: "This field is required",
@@ -78,7 +86,9 @@ export default function SignupForm() {
         />
       </FormRow>
       <FormRow>
-        <Button variation="secondary">Cancel</Button>
+        <Button variation="secondary" onClick={onCloseModal}>
+          Cancel
+        </Button>
         <Button disabled={isLoading}>Create a new user</Button>
       </FormRow>
     </Form>

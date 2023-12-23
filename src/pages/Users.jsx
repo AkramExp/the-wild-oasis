@@ -1,13 +1,17 @@
 import React from "react";
 import Row from "../ui/Row";
 import Heading from "../ui/Heading";
-import SignupForm from "../features/authentication/SignupForm";
+import UserTable from "../features/users/UserTable";
+import AddUser from "../features/users/AddUser";
 
 export default function Users() {
   return (
     <Row type="vertical">
-      <Heading as="h1">Create a new user</Heading>
-      <SignupForm />
+      <Heading as="h1">All Users</Heading>
+      <UserTable />
+      <div>
+        <AddUser />
+      </div>
     </Row>
   );
 }

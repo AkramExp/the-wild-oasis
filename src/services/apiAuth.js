@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase, { adminSupabase } from "./supabase";
 
 export async function signup({ email, password, fullName }) {
   const { data, error } = await supabase.auth.signUp({
@@ -40,8 +40,27 @@ export async function getCurrentUser() {
   return data?.user;
 }
 
+export async function getUsers() {
+  const {
+    data: { users },
+    error,
+  } = await adminSupabase.auth.admin.listUsers();
+
+  if (error) throw new Error(error.message);
+
+  return users;
+}
+
 export async function logout() {
   const { error } = await supabase.auth.signOut();
 
   if (error) throw new Error(error.message);
+}
+
+export async function deleteUser(id) {
+  const { data, error } = await adminSupabase.auth.admin.deleteUser(id);
+
+  if (error) throw new Error(error.message);
+
+  return data;
 }
