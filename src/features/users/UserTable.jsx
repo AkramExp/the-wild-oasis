@@ -11,7 +11,7 @@ export default function UserTable() {
 
   return (
     <Menus>
-      <Table columns="1fr 1.5fr 1.5fr 1fr 1rem">
+      <Table columns="1fr 1.5fr 1.5fr 1fr 4rem">
         <Table.Header>
           <div>Name</div>
           <div>Email</div>
