@@ -6,8 +6,8 @@ import Button from "../../ui/Button";
 import useLogin from "./useLogin";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("akram@example.com");
-  const [password, setPassword] = useState("root");
+  const [email, setEmail] = useState("admin@example.com");
+  const [password, setPassword] = useState("root1234");
   const { login, isLoading } = useLogin();
 
   function handleSubmit(e) {
