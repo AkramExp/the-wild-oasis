@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Logo from "./Logo";
 import MainNav from "./MainNav";
-import Uploader from "../data/Uploader";
 
 const StyledSidebar = styled.aside`
   padding: 3.2rem 2.4rem;
@@ -19,8 +18,6 @@ export default function Sidebar() {
     <StyledSidebar>
       <Logo />
       <MainNav />
-
-      <Uploader />
     </StyledSidebar>
   );
 }
