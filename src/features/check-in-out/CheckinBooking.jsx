@@ -9,7 +9,7 @@ import BookingDataBox from "../bookings/BookingDataBox";
 import Button from "../../ui/Button";
 import ButtonGroup from "../../ui/ButtonGroup";
 import Spinner from "../../ui/Spinner";
-import CheckBox from "../../ui/CheckBox";
+import Checkbox from "../../ui/Checkbox";
 import styled from "styled-components";
 
 import useCheckin from "./useCheckin";
@@ -79,7 +79,7 @@ export default function CheckinBooking() {
 
       {!hasBreakfast && (
         <Box>
-          <CheckBox
+          <Checkbox
             checked={addBreakfast}
             onChange={() => {
               setAddBreakfast((add) => !add);
@@ -88,12 +88,12 @@ export default function CheckinBooking() {
             id="breakfast"
           >
             Want to add breakfast for {formatCurrency(optionalBreakfastPrice)}?
-          </CheckBox>
+          </Checkbox>
         </Box>
       )}
 
       <Box>
-        <CheckBox
+        <Checkbox
           checked={confirmPaid}
           onChange={() => setConfirmPaid((confirm) => !confirm)}
           disabled={confirmPaid || isCheckinIn}
@@ -103,7 +103,7 @@ export default function CheckinBooking() {
           {!addBreakfast
             ? formatCurrency(totalPrice)
             : formatCurrency(totalPrice + optionalBreakfastPrice)}
-        </CheckBox>
+        </Checkbox>
       </Box>
 
       <ButtonGroup>
