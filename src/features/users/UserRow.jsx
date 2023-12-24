@@ -2,11 +2,10 @@ import { format } from "date-fns";
 import Table from "../../ui/Table";
 import styled from "styled-components";
 import Modal from "../../ui/Modal";
-import Menus from "../../ui/Menus";
-import { HiPencil, HiTrash } from "react-icons/hi2";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import useDeleteUser from "./useDeleteUser";
-import SignUpForm from "../authentication/SignupForm";
+import ButtonIcon from "../../ui/ButtonIcon";
+import { HiTrash } from "react-icons/hi2";
 
 const Name = styled.div`
   font-weight: 500;
@@ -17,6 +16,16 @@ const CreateDate = styled.div`
   color: var(--color-grey-500);
 `;
 
+const Avatar = styled.img`
+  display: block;
+  width: 3.6rem;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  outline: 2px solid var(--color-grey-100);
+`;
+
 export default function UserRow({ user }) {
   console.log(user);
   const { deleteUser, isDeleting } = useDeleteUser();
@@ -24,7 +33,7 @@ export default function UserRow({ user }) {
     id: userId,
     email,
     created_at,
-    user_metadata: { fullName },
+    user_metadata: { fullName, avatar },
   } = user;
 
   return (
@@ -32,30 +41,21 @@ export default function UserRow({ user }) {
       <Name>{fullName}</Name>
       <div>{email}</div>
       <CreateDate>{format(new Date(created_at), "MMM dd yyyy")}</CreateDate>
+      <Avatar src={avatar || "default-user.jpg"} />
+
       <Modal>
-        <Menus.Menu>
-          <Menus.Toggle id={userId} />
-          <Menus.List id={userId}>
-            <Modal.Open opens="edit-user">
-              <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
-            </Modal.Open>
+        <Modal.Open opens="delete-row">
+          <ButtonIcon variation="danger">
+            <HiTrash />
+          </ButtonIcon>
+        </Modal.Open>
 
-            <Modal.Open opens="delete-row">
-              <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
-            </Modal.Open>
-          </Menus.List>
-
-          <Modal.Window name="edit-user">
-            <SignUpForm />
-          </Modal.Window>
-
-          <Modal.Window name="delete-row">
-            <ConfirmDelete
-              disabled={isDeleting}
-              onConfirm={() => deleteUser(userId)}
-            />
-          </Modal.Window>
-        </Menus.Menu>
+        <Modal.Window name="delete-row">
+          <ConfirmDelete
+            disabled={isDeleting}
+            onConfirm={() => deleteUser(userId)}
+          />
+        </Modal.Window>
       </Modal>
     </Table.Row>
   );
