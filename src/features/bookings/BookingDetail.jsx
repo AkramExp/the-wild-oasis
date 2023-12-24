@@ -12,7 +12,6 @@ import BookingDataBox from "./BookingDataBox";
 import { HiArrowUpOnSquare } from "react-icons/hi2";
 import useCheckout from "../check-in-out/useCheckout";
 import useDeleteBooking from "./useDeleteBooking";
-import { deleteBooking } from "../../services/apiBookings";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Modal from "../../ui/Modal";
 
@@ -57,7 +56,11 @@ export default function BookingDetail() {
       <ButtonGroup>
         <Modal>
           <Modal.Open opens="delete">
-            <Button variation="danger" onClick={() => deleteBooking(bookingId)}>
+            <Button
+              variation="danger"
+              onClick={() => deleteBooking(bookingId)}
+              disabled={isDeleting}
+            >
               Delete
             </Button>
           </Modal.Open>
